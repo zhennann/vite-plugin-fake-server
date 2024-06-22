@@ -29,7 +29,7 @@
 		"release": "bumpp -r && pnpm -r publish --access public"
 	},
 	"simple-git-hooks": {
-		"pre-commit": "npx lint-staged"
+		"pre-commit-": "npx lint-staged"
 	},
 	"lint-staged": {
 		"*.{ts,js,mjs,cjs,cts,mts,json}": [
