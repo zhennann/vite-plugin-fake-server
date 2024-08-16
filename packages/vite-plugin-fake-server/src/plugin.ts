@@ -4,6 +4,7 @@ import { join, dirname, relative, isAbsolute } from "node:path";
 import { STATUS_CODES } from "node:http";
 
 import type { Plugin, ResolvedConfig, HtmlTagDescriptor, WatchOptions } from "vite";
+import type { AnymatchPattern } from "fast-glob";
 
 import pkg from "../package.json";
 
@@ -49,7 +50,7 @@ export const vitePluginFakeServer = async (options: VitePluginFakeServerOptions 
 			}
 		},
 
-		async configureServer({ middlewares, httpServer }) {
+		async configureServer({ middlewares, httpServer, ws }) {
 			if (isDevServer && opts.enableDev) {
 				// Define logger
 				const loggerOutput = createLogger(config.logLevel, {
@@ -57,7 +58,7 @@ export const vitePluginFakeServer = async (options: VitePluginFakeServerOptions 
 					customLogger: config.customLogger,
 				});
 
-				const middleware = await createFakeMiddleware({ ...opts, loggerOutput, root: config.root }, httpServer);
+				const middleware = await createFakeMiddleware({ ...opts, loggerOutput, root: config.root }, httpServer, ws);
 				middlewares.use(middleware);
 			}
 		},
@@ -103,7 +104,7 @@ export const vitePluginFakeServer = async (options: VitePluginFakeServerOptions 
 
 				const fakeFilePath = getFakeFilePath(
 					{
-						include: opts.include.length ? [opts.include] : [],
+						include: opts.include,
 						exclude: opts.exclude,
 						extensions: opts.extensions,
 						infixName: opts.infixName,
@@ -300,7 +301,9 @@ export const vitePluginFakeServer = async (options: VitePluginFakeServerOptions 
 	};
 };
 
-export function resolveIgnored(rootDir: string, include: string, watchOptions?: WatchOptions | null) {
+export function resolveIgnored(rootDir: string, include: string[], watchOptions?: WatchOptions | null) {
 	const { ignored = [] } = watchOptions ?? {};
-	return [convertPathToPosix(join(rootDir, include, "**")), ...(Array.isArray(ignored) ? ignored : [ignored])];
+	const dirs: AnymatchPattern[] = include.map((item) => convertPathToPosix(join(rootDir, item, "**")));
+	return dirs.concat(Array.isArray(ignored) ? ignored : [ignored]);
+	//return [convertPathToPosix(join(rootDir, include, "**")), ...(Array.isArray(ignored) ? ignored : [ignored])];
 }

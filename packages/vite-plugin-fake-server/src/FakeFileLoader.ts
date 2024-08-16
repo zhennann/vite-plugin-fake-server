@@ -6,6 +6,7 @@ import { bundleImport } from "bundle-import";
 import type { DependenciesType } from "bundle-import";
 import chokidar from "chokidar";
 import colors from "picocolors";
+import type { WebSocketServer } from "vite";
 
 import { getFakeFilePath, parallelLoader } from "./node";
 import type { FakeRoute } from "./node";
@@ -16,6 +17,7 @@ import { convertPathToPosix } from "./utils";
 export interface FakeFileLoaderOptions extends ResolvePluginOptionsType {
 	loggerOutput: Logger;
 	root: string;
+	ws?: WebSocketServer;
 }
 
 export class FakeFileLoader extends EventEmitter {
@@ -42,7 +44,7 @@ export class FakeFileLoader extends EventEmitter {
 		// console.time("loader");
 		const { include, exclude, extensions, infixName, root } = this.options;
 		// Note: return absolute path
-		const fakeFilePathArr = getFakeFilePath({ exclude, include: [include], extensions, infixName }, root);
+		const fakeFilePathArr = getFakeFilePath({ exclude, include, extensions, infixName }, root);
 
 		// 5.402s => 1.309s in packages/react-sample
 		// this.updateFakeData(await getFakeModule(fakeFilePathArr, this.options.loggerOutput));
@@ -57,13 +59,13 @@ export class FakeFileLoader extends EventEmitter {
 	private async watchFakeFile() {
 		const { include, watch, root, exclude, loggerOutput, extensions, infixName, logger } = this.options;
 		if (include && include.length && watch) {
-			let watchPath;
+			let watchPath: string;
 			if (infixName && infixName.length > 0) {
 				watchPath = `/**/*.${infixName}.{${extensions.join(",")}}`;
 			} else {
 				watchPath = `/**/*.{${extensions.join(",")}}`;
 			}
-			const watchDir = convertPathToPosix(join(include, watchPath));
+			const watchDir = include.map((item) => convertPathToPosix(join(item, watchPath)));
 			const watcher = chokidar.watch(watchDir, {
 				cwd: root,
 				ignoreInitial: true,
@@ -81,6 +83,7 @@ export class FakeFileLoader extends EventEmitter {
 
 				await this.loadFakeData(relativeFilePath);
 				this.updateFakeData();
+				this.options.ws?.send({ type: "full-reload" });
 			});
 
 			watcher.on("change", async (relativeFilePath) => {
@@ -93,6 +96,7 @@ export class FakeFileLoader extends EventEmitter {
 
 				await this.loadFakeData(relativeFilePath);
 				this.updateFakeData();
+				this.options.ws?.send({ type: "full-reload" });
 			});
 
 			watcher.on("unlink", async (relativeFilePath) => {
@@ -105,6 +109,7 @@ export class FakeFileLoader extends EventEmitter {
 
 				this.#moduleCache.delete(relativeFilePath);
 				this.updateFakeData();
+				this.options.ws?.send({ type: "full-reload" });
 			});
 		}
 	}

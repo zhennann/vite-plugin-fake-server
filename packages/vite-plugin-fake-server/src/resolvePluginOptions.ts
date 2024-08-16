@@ -5,7 +5,8 @@ import { resolveOptions as fakerResolveOptions } from "./node";
 import type { VitePluginFakeServerOptions } from "./types";
 
 export function resolvePluginOptions(options: VitePluginFakeServerOptions = {}, cwd = process.cwd()) {
-	const fakerOptions = fakerResolveOptions({ ...options, include: [options.include || "fake"] });
+	const include = Array.isArray(options.include) ? options.include : [options.include || "fake"];
+	const fakerOptions = fakerResolveOptions({ ...options, include });
 
 	for (const filePath of fakerOptions.include) {
 		const absolutePath = join(cwd, filePath);
@@ -16,7 +17,7 @@ export function resolvePluginOptions(options: VitePluginFakeServerOptions = {}, 
 
 	return {
 		...fakerOptions,
-		include: fakerOptions.include[0],
+		include: fakerOptions.include,
 		enableProd: options.enableProd ?? false,
 		enableDev: options.enableDev ?? true,
 		watch: options.watch ?? true,

@@ -1,5 +1,5 @@
 {
-	"name": "@zhennann/vite-plugin-fake-server",
+	"name": "vite-plugin-fake-server-turbo",
 	"version": "2.1.2",
 	"type": "module",
 	"license": "MIT",

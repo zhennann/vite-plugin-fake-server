@@ -21,10 +21,11 @@ export async function generateFakeServer(options: ResolvePluginOptionsType, conf
 	const cwd = process.cwd();
 	const outputDir = join(cwd, outDir);
 
+	const options2 = { ...options, include: ["mock"] };
 	const outputList = [
 		{
 			filename: join(outputDir, "index.js"),
-			source: generatorServerEntryCode(port, options, config),
+			source: generatorServerEntryCode(port, options2, config),
 		},
 		{
 			filename: join(outputDir, "package.json"),
@@ -37,7 +38,13 @@ export async function generateFakeServer(options: ResolvePluginOptionsType, conf
 	}
 
 	// copy fake directory
-	await copyFakeFiles(join(cwd, options.include), join(outputDir, options.include));
+	for (const pathSrc of options.include) {
+		const parts = pathSrc.replaceAll("\\", "/").split("/");
+		const moduleName = parts[parts.length - 2];
+		const pathDest = join(outputDir, "mock", moduleName);
+		await copyFakeFiles(join(cwd, pathSrc), pathDest);
+	}
+	// await copyFakeFiles(join(cwd, options.include), join(outputDir, options.include));
 	for (const { filename, source } of outputList) {
 		await writeFile(filename, source, "utf-8");
 	}

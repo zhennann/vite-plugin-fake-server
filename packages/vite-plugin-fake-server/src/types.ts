@@ -23,7 +23,7 @@ export interface VitePluginFakeServerOptions extends Omit<FakerSchemaServerOptio
 	 * @description Set the folder where the fake `xxx.fake.{ts,js,mjs,cjs,cts,mts}` files is stored.
 	 * @default fake
 	 */
-	include?: string;
+	include?: string[];
 
 	/**
 	 * @description Exclude files in the `include` directory.

@@ -4,7 +4,7 @@ import { URL } from "node:url";
 
 import { pathToRegexp, match } from "path-to-regexp";
 import colors from "picocolors";
-import type { Connect } from "vite";
+import type { Connect, WebSocketServer } from "vite";
 
 import { FakeFileLoader } from "./FakeFileLoader";
 import { getResponse, tryToJSON } from "./getResponse.mjs";
@@ -20,8 +20,9 @@ export interface CreateFakeMiddlewareOptions extends ResolvePluginOptionsType {
 export async function createFakeMiddleware(
 	{ loggerOutput, root, ...options }: CreateFakeMiddlewareOptions,
 	httpServer: Server | Http2SecureServer | null,
+	ws?: WebSocketServer,
 ) {
-	const fakeLoader = new FakeFileLoader({ ...options, loggerOutput, root });
+	const fakeLoader = new FakeFileLoader({ ...options, loggerOutput, root, ws });
 
 	await fakeLoader.start();
 	if (httpServer) {
