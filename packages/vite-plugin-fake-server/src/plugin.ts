@@ -7,7 +7,7 @@ import type { Plugin, ResolvedConfig, HtmlTagDescriptor, WatchOptions, AnymatchP
 
 import pkg from "../package.json";
 
-import { generateFakeServer } from "./build";
+import { generateFakeServer } from "./buildZova";
 import { createFakeMiddleware } from "./createFakeMiddleware";
 import { getResponse, sleep, tryToJSON } from "./getResponse.mjs";
 import { getFakeFilePath } from "./node";
