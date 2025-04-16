@@ -51,6 +51,7 @@ function _createEsbuildConfig(fileSrc: string, fileDest: string): esbuild.BuildO
 		resolveExtensions: [".mjs", ".js", ".mts", ".ts", ".json"],
 		entryPoints: [fileSrc],
 		outfile: fileDest,
+		minify: true,
 		banner: { js: "const require = createRequire(import.meta.url);" },
 	};
 }
