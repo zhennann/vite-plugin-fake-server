@@ -60,6 +60,7 @@ export default defineFlatConfig([
 			...pluginTypeScript.configs.strict.rules,
 			"@typescript-eslint/consistent-type-imports": "error",
 			"@typescript-eslint/no-non-null-assertion": "off",
+			"@typescript-eslint/no-explicit-any": "off",
 		},
 	},
 	{
