@@ -37,21 +37,26 @@ export class FakeFileLoader extends EventEmitter {
 	}
 
 	async start() {
-		// on must be emit before
-		this.watchFakeFileDeps();
-		await this.watchFakeFile();
+		if ((this.options as any).mockFiles) {
+			const fakeFilePathFunc = (this.options as any).mockFiles.map((item: any) => () => this.loadFakeDataDirect(item));
+			await parallelLoader(fakeFilePathFunc, 10);
+		} else {
+			// on must be emit before
+			this.watchFakeFileDeps();
+			await this.watchFakeFile();
 
-		// console.time("loader");
-		const { include, exclude, extensions, infixName, root } = this.options;
-		// Note: return absolute path
-		const fakeFilePathArr = getFakeFilePath({ exclude, include, extensions, infixName }, root);
+			// console.time("loader");
+			const { include, exclude, extensions, infixName, root } = this.options;
+			// Note: return absolute path
+			const fakeFilePathArr = getFakeFilePath({ exclude, include, extensions, infixName }, root);
 
-		// 5.402s => 1.309s in packages/react-sample
-		// this.updateFakeData(await getFakeModule(fakeFilePathArr, this.options.loggerOutput));
+			// 5.402s => 1.309s in packages/react-sample
+			// this.updateFakeData(await getFakeModule(fakeFilePathArr, this.options.loggerOutput));
 
-		const fakeFilePathFunc = fakeFilePathArr.map((absFile) => () => this.loadFakeData(relative(root, absFile)));
-		// TODO: Try to Web Worker
-		await parallelLoader(fakeFilePathFunc, 10);
+			const fakeFilePathFunc = fakeFilePathArr.map((absFile) => () => this.loadFakeData(relative(root, absFile)));
+			// TODO: Try to Web Worker
+			await parallelLoader(fakeFilePathFunc, 10);
+		}
 		this.updateFakeData();
 		// console.timeEnd("loader");
 	}
@@ -145,7 +150,7 @@ export class FakeFileLoader extends EventEmitter {
 			const oldDeps: string[] = [];
 
 			this.on("update:deps", () => {
-				const deps = [];
+				const deps: string[] = [];
 				for (const [dep] of this.#fakeFileDeps.entries()) {
 					deps.push(dep);
 				}
@@ -156,8 +161,24 @@ export class FakeFileLoader extends EventEmitter {
 		}
 	}
 
+	private async loadFakeDataDirect([filepath, func]: [string, any]) {
+		const fakeCodeData: any[] = [];
+		let fakeFileDependencies = {};
+		const mod = await func();
+		const resolvedModule = mod.default || mod;
+		if (Array.isArray(resolvedModule)) {
+			fakeCodeData.push(...resolvedModule);
+		} else {
+			fakeCodeData.push(resolvedModule);
+		}
+
+		this.#moduleCache.set(filepath, fakeCodeData);
+		this.updateFakeFileDeps(filepath, fakeFileDependencies);
+		return fakeCodeData;
+	}
+
 	private async loadFakeData(filepath: string) {
-		const fakeCodeData = [];
+		const fakeCodeData: any[] = [];
 		let fakeFileDependencies = {};
 		try {
 			const { mod, dependencies } = await bundleImport({ filepath, cwd: this.options.root });

@@ -1,5 +1,5 @@
 import { mkdir, writeFile, rm } from "node:fs/promises";
-import path, { join } from "node:path";
+import path, { join, relative } from "node:path";
 import { existsSync } from "node:fs";
 
 import type { ResolvedConfig } from "vite";
@@ -10,6 +10,7 @@ import { name } from "../package.json";
 
 import type { ServerBuildOptions } from "./types.js";
 import type { ResolvePluginOptionsType } from "./resolvePluginOptions.js";
+import { getFakeFilePath } from "./node/getFakeFilePath.js";
 
 export const PORT = 8888;
 export const OUTPUT_DIR = "fakeServer";
@@ -55,10 +56,10 @@ function _createEsbuildConfig(fileSrc: string, fileDest: string): esbuild.BuildO
 }
 
 function _generatorServerEntryCode(port: number, options: ResolvePluginOptionsType, config: ResolvedConfig) {
-	const mockFiles: string[] = [];
-	for (const pathSrc of options.include) {
-		mockFiles.push(`mockFiles.push(()=>import('../${pathSrc}'))`);
-	}
+	const { exclude, include, extensions, infixName } = options;
+	let fakeFilePathArr = getFakeFilePath({ exclude, include, extensions, infixName }, process.cwd());
+	fakeFilePathArr = fakeFilePathArr.map((item) => relative(process.cwd(), item));
+	const mockFiles = fakeFilePathArr.map((item) => `mockFiles.push(['${item}',()=>import('../${item}')]);`);
 
 	const options2 = { ...options, include: ["mock"] };
 	return `import connect from "connect";
