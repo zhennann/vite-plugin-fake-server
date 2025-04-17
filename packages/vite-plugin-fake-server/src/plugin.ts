@@ -4,6 +4,7 @@ import { join, dirname, relative, isAbsolute } from "node:path";
 import { STATUS_CODES } from "node:http";
 
 import type { Plugin, ResolvedConfig, HtmlTagDescriptor, WatchOptions, AnymatchPattern } from "vite";
+import cors from "cors";
 
 import pkg from "../package.json";
 
@@ -58,6 +59,7 @@ export const vitePluginFakeServer = async (options: VitePluginFakeServerOptions 
 				});
 
 				const middleware = await createFakeMiddleware({ ...opts, loggerOutput, root: config.root }, httpServer, ws);
+				middlewares.use(cors());
 				middlewares.use(middleware);
 			}
 		},
