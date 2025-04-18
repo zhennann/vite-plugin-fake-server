@@ -52,7 +52,7 @@ function _createEsbuildConfig(fileSrc: string, fileDest: string): esbuild.BuildO
 		entryPoints: [fileSrc],
 		outfile: fileDest,
 		minify: true,
-		banner: { js: "const require = createRequire(import.meta.url);" },
+		banner: { js: "import { createRequire } from 'module';const require = createRequire(import.meta.url);" },
 	};
 }
 
