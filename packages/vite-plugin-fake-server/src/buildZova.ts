@@ -92,7 +92,7 @@ async function main() {
 	app.use(middleware);
 
 	app.listen(${port});
-	console.log("listen: http://localhost:${port}");
+	console.log("Mock Server listening at port ${port}");
 }
 
 main();
