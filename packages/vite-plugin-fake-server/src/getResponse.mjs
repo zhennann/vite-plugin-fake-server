@@ -41,9 +41,10 @@ export async function getResponse({
 	 * Join two paths into a complete path
 	 */
 	function joinPathname(a, b) {
-		const aPathname = new URL(a, "http://localhost:5173/").pathname;
-		const bPathname = new URL(b, "http://localhost:5173/").pathname;
-		return aPathname.endsWith("/") ? aPathname.slice(0, -1) + bPathname : aPathname + bPathname;
+		return a + b;
+		// const aPathname = new URL(a, "http://localhost:5173/").pathname;
+		// const bPathname = new URL(b, "http://localhost:5173/").pathname;
+		// return aPathname.endsWith("/") ? aPathname.slice(0, -1) + bPathname : aPathname + bPathname;
 	}
 
 	if (req.url) {

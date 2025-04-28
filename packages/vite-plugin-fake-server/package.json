@@ -60,7 +60,7 @@
 		"cors": "^2.8.5",
 		"esbuild": "0.25.2",
 		"fast-glob": "^3.3.2",
-		"path-to-regexp": "^6.2.1",
+		"path-to-regexp": "^8.2.0",
 		"picocolors": "^1.0.0"
 	},
 	"devDependencies": {
