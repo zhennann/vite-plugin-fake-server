@@ -64,7 +64,8 @@ export async function getResponse({
 				return false;
 			}
 			const realURL = joinPathname(basename, item.url);
-			return pathToRegexp(realURL).test(pathname);
+			const { regexp } = pathToRegexp(realURL);
+			return regexp.exec(pathname);
 		});
 		if (matchRequest) {
 			const {
