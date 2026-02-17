@@ -1,6 +1,6 @@
 {
 	"name": "vite-plugin-fake-server-turbo",
-	"version": "3.0.9",
+	"version": "3.0.10",
 	"type": "module",
 	"license": "MIT",
 	"author": "Condor Hero",
@@ -60,7 +60,7 @@
 		"cors": "^2.8.5",
 		"esbuild": "0.25.2",
 		"fast-glob": "^3.3.2",
-		"path-to-regexp": "^8.2.0",
+		"path-to-regexp": "^8.3.0",
 		"picocolors": "^1.0.0"
 	},
 	"devDependencies": {
