@@ -148,7 +148,7 @@ export const vitePluginFakeServer = async (options: VitePluginFakeServerOptions 
 				const pathToRegexpContent = await buildPackage("path-to-regexp");
 				scriptTagList.push({
 					...scriptTagOptions,
-					children: `${pathToRegexpContent}\n;window.__VITE__PLUGIN__FAKE__SERVER__.pathToRegexp={pathToRegexp, match};`,
+					children: `${pathToRegexpContent}`,
 				});
 
 				scriptTagList.push({
