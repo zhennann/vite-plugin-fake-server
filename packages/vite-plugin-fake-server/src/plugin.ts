@@ -149,7 +149,7 @@ export const vitePluginFakeServer = async (options: VitePluginFakeServerOptions 
 				});
 
 				// add path-to-regexp
-				const pathToRegexpPath = join(dirname(require.resolve("path-to-regexp")), "../dist.es2015/index.js");
+				const pathToRegexpPath = join(dirname(require.resolve("path-to-regexp")), "../dist/index.js");
 				const pathToRegexpContent = readFileSync(pathToRegexpPath, "utf-8");
 				scriptTagList.push({
 					...scriptTagOptions,
