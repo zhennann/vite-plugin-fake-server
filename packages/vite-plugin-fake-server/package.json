@@ -13,8 +13,7 @@
 		"./client": {
 			"require": "./dist/client.cjs",
 			"import": "./dist/client.mjs"
-		},
-		"./*": "./*"
+		}
 	},
 	"main": "dist/index.cjs",
 	"module": "dist/index.mjs",
@@ -28,8 +27,7 @@
 		}
 	},
 	"files": [
-		"dist",
-		"src"
+		"dist"
 	],
 	"keywords": [
 		"vite-plugin-fake-server",
@@ -57,13 +55,13 @@
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
-		"bundle-import": "^0.0.1",
-		"chokidar": "^3.5.3",
+		"bundle-import": "^0.0.2",
+		"chokidar": "^4.0.3",
 		"cors": "^2.8.5",
 		"esbuild": "0.25.2",
 		"fast-glob": "^3.3.2",
 		"path-to-regexp": "^8.3.0",
-		"picocolors": "^1.0.0"
+		"picocolors": "^1.1.1"
 	},
 	"devDependencies": {
 		"vite": "^7.1.12"

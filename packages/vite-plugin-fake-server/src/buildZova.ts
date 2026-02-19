@@ -65,8 +65,7 @@ function _generatorServerEntryCode(port: number, options: ResolvePluginOptionsTy
 	const options2 = { ...options, include: ["mock"] };
 	return `import connect from "connect";
 ${options.cors ? 'import cors from "cors";' : ""}
-import { createFakeMiddleware } from "${name}/src/createFakeMiddleware.ts";
-import { createLogger } from "${name}/src/utils/logger.ts";
+import { createFakeMiddleware, createLogger } from "${name}";
 
 const loggerOutput = createLogger(${JSON.stringify(config.logLevel)}, {
 	allowClearScreen: ${config.clearScreen},
