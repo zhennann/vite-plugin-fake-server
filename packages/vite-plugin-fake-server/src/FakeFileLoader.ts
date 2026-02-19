@@ -1,7 +1,7 @@
 import EventEmitter from "node:events";
-import type { FSWatcher } from "node:fs";
 import { join, relative } from "node:path";
 
+import type { FSWatcher } from "chokidar";
 import { bundleImport } from "bundle-import";
 import type { DependenciesType } from "bundle-import";
 import chokidar from "chokidar";
