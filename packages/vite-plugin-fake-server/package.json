@@ -1,6 +1,6 @@
 {
 	"name": "vite-plugin-fake-server-turbo",
-	"version": "3.0.14",
+	"version": "3.0.15",
 	"type": "module",
 	"license": "MIT",
 	"author": "Condor Hero",
