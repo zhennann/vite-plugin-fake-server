@@ -1,6 +1,6 @@
 {
 	"name": "vite-plugin-fake-server-turbo",
-	"version": "3.0.12",
+	"version": "3.0.13",
 	"type": "module",
 	"license": "MIT",
 	"author": "Condor Hero",
@@ -61,10 +61,11 @@
 		"esbuild": "0.25.2",
 		"fast-glob": "^3.3.2",
 		"path-to-regexp": "^8.3.0",
-		"picocolors": "^1.0.0",
+		"picocolors": "^1.0.0"
+	},
+	"devDependencies": {
 		"vite": "^7.1.12"
 	},
-	"devDependencies": {},
 	"publishConfig": {
 		"access": "public",
 		"registry": "https://registry.npmjs.org"
