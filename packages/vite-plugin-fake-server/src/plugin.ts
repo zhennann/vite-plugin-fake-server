@@ -1,5 +1,6 @@
-import { join, relative, isAbsolute } from "node:path";
+import path, { join, relative, isAbsolute } from "node:path";
 import { STATUS_CODES } from "node:http";
+import { readFileSync } from "node:fs";
 
 import type { Plugin, ResolvedConfig, HtmlTagDescriptor, WatchOptions, AnymatchPattern } from "vite";
 import cors from "cors";
@@ -13,7 +14,7 @@ import { getFakeFilePath } from "./node";
 import { resolvePluginOptions } from "./resolvePluginOptions";
 import type { ResolvePluginOptionsType } from "./resolvePluginOptions";
 import type { VitePluginFakeServerOptions } from "./types";
-import { buildPackage, createLogger, convertPathToPosix } from "./utils";
+import { createLogger, convertPathToPosix } from "./utils";
 import { xhook } from "./xhook/index.mjs";
 
 export const vitePluginFakeServer = async (options: VitePluginFakeServerOptions = {}): Promise<Plugin> => {
@@ -145,7 +146,8 @@ export const vitePluginFakeServer = async (options: VitePluginFakeServerOptions 
 				});
 
 				// add path-to-regexp
-				const pathToRegexpContent = await buildPackage("path-to-regexp");
+				const pathToRegexpFile = path.join(import.meta.dirname, "../dist-res/path-to-regexp.js");
+				const pathToRegexpContent = readFileSync(pathToRegexpFile).toString();
 				scriptTagList.push({
 					...scriptTagOptions,
 					children: `${pathToRegexpContent}`,
