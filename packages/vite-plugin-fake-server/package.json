@@ -1,20 +1,31 @@
 {
 	"name": "vite-plugin-fake-server-turbo",
-	"version": "3.0.15",
-	"type": "module",
+	"version": "3.0.16",
+	"description": "A fake server plugin for Vite.",
+	"keywords": [
+		"faker-server",
+		"vite-plugin-fake",
+		"vite-plugin-fake-server",
+		"vite-plugin-faker",
+		"vite-plugin-mock",
+		"vite-plugin-mock-server"
+	],
+	"homepage": "https://github.com/condorheroblog/vite-plugin-fake-server/blob/main/README.md",
+	"bugs": {
+		"url": "https://github.com/condorheroblog/vite-plugin-fake-server/issues"
+	},
 	"license": "MIT",
 	"author": "Condor Hero",
-	"description": "A fake server plugin for Vite.",
-	"exports": {
-		".": {
-			"require": "./dist/index.cjs",
-			"import": "./dist/index.mjs"
-		},
-		"./client": {
-			"require": "./dist/client.cjs",
-			"import": "./dist/client.mjs"
-		}
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/condorheroblog/vite-plugin-fake-server.git",
+		"directory": "packages/vite-plugin-fake-server"
 	},
+	"files": [
+		"dist",
+		"dist-res"
+	],
+	"type": "module",
 	"main": "dist/index.cjs",
 	"module": "dist/index.mjs",
 	"types": "dist/index.d.cts",
@@ -26,26 +37,20 @@
 			]
 		}
 	},
-	"files": [
-		"dist"
-	],
-	"keywords": [
-		"vite-plugin-fake-server",
-		"vite-plugin-fake",
-		"vite-plugin-faker",
-		"vite-plugin-mock-server",
-		"vite-plugin-mock",
-		"faker-server"
-	],
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/condorheroblog/vite-plugin-fake-server.git",
-		"directory": "packages/vite-plugin-fake-server"
+	"exports": {
+		".": {
+			"require": "./dist/index.cjs",
+			"import": "./dist/index.mjs"
+		},
+		"./client": {
+			"require": "./dist/client.cjs",
+			"import": "./dist/client.mjs"
+		}
 	},
-	"bugs": {
-		"url": "https://github.com/condorheroblog/vite-plugin-fake-server/issues"
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org"
 	},
-	"homepage": "https://github.com/condorheroblog/vite-plugin-fake-server/blob/main/README.md",
 	"scripts": {
 		"prepublishOnly": "npm run build",
 		"test": "vitest",
@@ -65,9 +70,5 @@
 	},
 	"devDependencies": {
 		"vite": "^7.1.12"
-	},
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org"
 	}
 }
