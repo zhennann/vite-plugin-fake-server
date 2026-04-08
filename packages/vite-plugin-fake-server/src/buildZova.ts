@@ -11,6 +11,7 @@ import { name } from "../package.json";
 import type { ServerBuildOptions } from "./types.js";
 import type { ResolvePluginOptionsType } from "./resolvePluginOptions.js";
 import { getFakeFilePath } from "./node/getFakeFilePath.js";
+import { convertPathToPosix } from "./utils/convertPathToPosix.js";
 
 export const PORT = 8888;
 export const OUTPUT_DIR = "fakeServer";
@@ -59,7 +60,7 @@ function _createEsbuildConfig(fileSrc: string, fileDest: string): esbuild.BuildO
 function _generatorServerEntryCode(port: number, options: ResolvePluginOptionsType, config: ResolvedConfig) {
 	const { exclude, include, extensions, infixName } = options;
 	let fakeFilePathArr = getFakeFilePath({ exclude, include, extensions, infixName }, process.cwd());
-	fakeFilePathArr = fakeFilePathArr.map((item) => relative(process.cwd(), item));
+	fakeFilePathArr = fakeFilePathArr.map((item) => convertPathToPosix(relative(process.cwd(), item)));
 	const mockFiles = fakeFilePathArr.map((item) => `mockFiles.push(['${item}',()=>import('../${item}')]);`);
 
 	const options2 = { ...options, include: ["mock"] };
